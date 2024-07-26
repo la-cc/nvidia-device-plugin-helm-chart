@@ -2,13 +2,16 @@
   name: chart-publish
   on:
     push:
-      branches:
-        - main
+      tags:
+        - '*'
+
   env:
     HELM_DOCS_VERSION: '1.14.2'
+
   permissions: read-all
+
   jobs:
-    publish:
+    release:
       permissions:
         contents: write # for helm/chart-releaser-action to push chart release and create a release
         packages: write # for helm/chart-releaser-action to push chart release and create a release
@@ -52,6 +55,19 @@
               helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
               cosign sign -y $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
             done
+
+    generate-docs:
+      needs: release
+      permissions:
+        contents: write
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Install Helm
+          uses: azure/setup-helm@v3
         - name: install helm-docs
           run: |
             cd /tmp
