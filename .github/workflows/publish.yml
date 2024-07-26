@@ -2,8 +2,8 @@
   name: chart-publish
   on:
     push:
-      tags:
-        - '*'
+      branches:
+        - main
 
   env:
     HELM_DOCS_VERSION: '1.14.2'
