@@ -3,6 +3,20 @@ entries:
   nvidia-device-plugin:
   - apiVersion: v2
     appVersion: v0.16.0
+    created: "2024-07-26T20:12:53.359861442Z"
+    description: A Helm chart for deploying NVIDIA Device Plugin DaemonSet
+    digest: 118014ffeb05e6ad2d883ccce2c916a8f3e97f4a5ffbb6bcafff0bd3306ba44f
+    home: https://github.com/la-cc/nvidia-device-plugin-helm-chart
+    maintainers:
+    - name: la-cc
+      url: https://github.com/la-cc
+    name: nvidia-device-plugin
+    type: application
+    urls:
+    - https://github.com/la-cc/nvidia-device-plugin-helm-chart/releases/download/0.1.4-helm/nvidia-device-plugin-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: v0.16.0
     created: "2024-07-26T20:06:15.683795335Z"
     description: A Helm chart for deploying NVIDIA Device Plugin DaemonSet
     digest: af55c81c4ad9198909d2d4ea81c712350b3ee8c9507fbce2b8dd445af1cc860d
@@ -29,4 +43,4 @@ entries:
     urls:
     - https://github.com/la-cc/nvidia-device-plugin-helm-chart/releases/download/0.1.0/nvidia-device-plugin-0.1.2.tgz
     version: 0.1.2
-generated: "2024-07-26T20:06:15.683802719Z"
+generated: "2024-07-26T20:12:53.359878655Z"
