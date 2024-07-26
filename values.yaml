@@ -1,0 +1,62 @@
+# -- Number of pod replicas to deploy.
+replicaCount: 1
+
+# -- Configuration for the Docker image used by the pod.
+image:
+  # -- The Docker repository to pull the image from.
+  repository: nvcr.io/nvidia/k8s-device-plugin
+  # -- The specific tag of the image to use.
+  tag: v0.16.0
+  # -- The pull policy for the image. IfNotPresent means the image will only be pulled if it is not already present locally.
+  pullPolicy: IfNotPresent
+
+# -- Constraints to ensure pods are scheduled on nodes with specific attributes.
+nodeSelector:
+  # -- Only schedule pods on nodes with this instance type.
+  node.kubernetes.io/instance-type: Standard_NC6s_v3
+
+# -- Tolerations for taints on nodes, allowing pods to be scheduled on tainted nodes.
+tolerations:
+  # -- The taint key that the toleration applies to.
+  - key: "ai"
+    # -- The operator to use for the toleration.
+    operator: "Equal"
+    # -- The value of the taint to tolerate.
+    value: "true"
+    # -- The effect of the taint; pods with this toleration can be scheduled on nodes with the taint.
+    effect: "NoSchedule"
+
+# -- Priority class name for the pod, indicating its scheduling priority.
+priorityClassName: "system-node-critical"
+
+# -- Environment variables to set in the container.
+env:
+  # -- Name of the environment variable.
+  - name: FAIL_ON_INIT_ERROR
+    # -- Value of the environment variable.
+    value: "false"
+
+# -- Volumes to mount into the container.
+volumeMounts:
+  # -- Name of the volume.
+  - name: device-plugin
+    # -- Path inside the container where the volume should be mounted.
+    mountPath: /var/lib/kubelet/device-plugins
+
+# -- Volumes to be used by the pod.
+volumes:
+  # -- Name of the volume.
+  - name: device-plugin
+    # -- Use a directory from the host node's filesystem.
+    hostPath:
+      # -- Path on the host node to use as the volume.
+      path: /var/lib/kubelet/device-plugins
+
+# -- Security options for the pod.
+securityContext:
+  # -- Prevent privilege escalation within the container.
+  allowPrivilegeEscalation: false
+  # -- Capabilities to add or drop from the default set.
+  capabilities:
+    # -- Drop all capabilities for the container.
+    drop: ["ALL"]
