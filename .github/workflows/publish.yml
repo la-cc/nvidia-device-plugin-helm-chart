@@ -11,7 +11,7 @@
   permissions: read-all
 
   jobs:
-    release:
+    helm-release:
       permissions:
         contents: write # for helm/chart-releaser-action to push chart release and create a release
         packages: write # for helm/chart-releaser-action to push chart release and create a release
@@ -57,7 +57,7 @@
             done
 
     generate-docs:
-      needs: release
+      needs: helm-release
       permissions:
         contents: write
       runs-on: ubuntu-latest
@@ -83,6 +83,7 @@
             helm-docs --dry-run > README.md
         - name: Commit and push README.md
           run: |
+            git checkout -B main # Switch to the main branch
             git add README.md
             git commit -m "Update README.md"
             git push origin main
