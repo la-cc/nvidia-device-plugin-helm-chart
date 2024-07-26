@@ -2,6 +2,21 @@ apiVersion: v1
 entries:
   nvidia-device-plugin:
   - apiVersion: v2
+    appVersion: v0.16.1
+    created: "2024-07-26T22:30:13.450261694Z"
+    description: A Helm chart for deploying NVIDIA Device Plugin DaemonSet to allow
+      scheduling of GPU workloads on nodes with NVIDIA GPUs.
+    digest: f16b11d3c3793b6022933468b257c356fa2e0253c27332b2c302ab4a940357af
+    maintainers:
+    - email: artem@lajko.dev
+      name: la-cc
+      url: https://github.com/la-cc
+    name: nvidia-device-plugin
+    type: application
+    urls:
+    - https://github.com/la-cc/nvidia-device-plugin-helm-chart/releases/download/0.2.3-helm/nvidia-device-plugin-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
     appVersion: v0.16.0
     created: "2024-07-26T22:28:06.413983167Z"
     description: A Helm chart for deploying NVIDIA Device Plugin DaemonSet to allow
@@ -133,4 +148,4 @@ entries:
     urls:
     - https://github.com/la-cc/nvidia-device-plugin-helm-chart/releases/download/0.1.0/nvidia-device-plugin-0.1.2.tgz
     version: 0.1.2
-generated: "2024-07-26T22:28:06.414048389Z"
+generated: "2024-07-26T22:30:13.450307159Z"
