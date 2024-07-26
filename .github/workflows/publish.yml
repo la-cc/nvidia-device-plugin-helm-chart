@@ -63,9 +63,7 @@
             helm-docs .
         - name: Commit and push README.md
           run: |
-            git status
-            ls
-            git add README.md
+            git add charts/nvidia-device-plugin/README.md
             git commit -m "Update README.md"
             git push origin main
           env:
