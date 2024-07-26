@@ -52,7 +52,10 @@ jobs:
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           CR_RELEASE_NAME_TEMPLATE: '{{ .Version }}-helm'
+      - uses: sigstore/cosign-installer@v3.5.0
       - name: Push chart to GHCR
+        env:
+          COSIGN_EXPERIMENTAL: 1
         run: |
           shopt -s nullglob
           for pkg in .cr-release-packages/*; do
@@ -60,4 +63,5 @@ jobs:
               break
             fi
             helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
+            cosign sign $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
           done
