@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nvidia-device-plugin-daemonset
+  name: {{ .Values.fullnameOverride | default .Release.Name }}
   namespace: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      name: nvidia-device-plugin-ds
+      app: {{ .Values.fullnameOverride | default .Release.Name }}
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        name: nvidia-device-plugin-ds
+        app: {{ .Values.fullnameOverride | default .Release.Name }}
     spec:
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
