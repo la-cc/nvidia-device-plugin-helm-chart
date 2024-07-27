@@ -14,9 +14,9 @@ image:
   pullPolicy: IfNotPresent
 
 # -- Constraints to ensure pods are scheduled on nodes with specific attributes.
-nodeSelector:
+nodeSelector: {}
   # -- Only schedule pods on nodes with this instance type.
-  node.kubernetes.io/instance-type: Standard_NC6s_v3
+  # node.kubernetes.io/instance-type: Standard_NC6s_v3
 
 # -- Tolerations for taints on nodes, allowing pods to be scheduled on tainted nodes.
 tolerations:
