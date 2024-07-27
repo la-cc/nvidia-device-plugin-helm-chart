@@ -2,7 +2,7 @@
 
 A Helm chart for deploying NVIDIA Device Plugin DaemonSet to allow scheduling of GPU workloads on nodes with NVIDIA GPUs.
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: v0.16.1](https://img.shields.io/badge/AppVersion-v0.16.1-informational?style=flat-square)
 
@@ -29,6 +29,7 @@ $ helm install nvidia-device-plugin nvidia-device-plugin/nvidia-device-plugin
 | env | list | `[{"name":"FAIL_ON_INIT_ERROR","value":"false"}]` | Environment variables to set in the container. |
 | env[0] | object | `{"name":"FAIL_ON_INIT_ERROR","value":"false"}` | Name of the environment variable. |
 | env[0].value | string | `"false"` | Value of the environment variable. |
+| fullnameOverride | string | `"nvidia-device-plugin"` | Override the full name of the chart. |
 | image | object | `{"pullPolicy":"IfNotPresent","repository":"nvcr.io/nvidia/k8s-device-plugin","tag":"v0.16.1"}` | Configuration for the Docker image used by the pod. |
 | image.pullPolicy | string | `"IfNotPresent"` | The pull policy for the image. IfNotPresent means the image will only be pulled if it is not already present locally. |
 | image.repository | string | `"nvcr.io/nvidia/k8s-device-plugin"` | The Docker repository to pull the image from. |
