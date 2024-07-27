@@ -2,7 +2,7 @@
 
 A Helm chart for deploying NVIDIA Device Plugin DaemonSet to allow scheduling of GPU workloads on nodes with NVIDIA GPUs.
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square)
+![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: v0.16.1](https://img.shields.io/badge/AppVersion-v0.16.1-informational?style=flat-square)
 
@@ -34,8 +34,7 @@ $ helm install nvidia-device-plugin nvidia-device-plugin/nvidia-device-plugin
 | image.pullPolicy | string | `"IfNotPresent"` | The pull policy for the image. IfNotPresent means the image will only be pulled if it is not already present locally. |
 | image.repository | string | `"nvcr.io/nvidia/k8s-device-plugin"` | The Docker repository to pull the image from. |
 | image.tag | string | `"v0.16.1"` | The specific tag of the image to use. |
-| nodeSelector | object | `{"node.kubernetes.io/instance-type":"Standard_NC6s_v3"}` | Constraints to ensure pods are scheduled on nodes with specific attributes. |
-| nodeSelector."node.kubernetes.io/instance-type" | string | `"Standard_NC6s_v3"` | Only schedule pods on nodes with this instance type. |
+| nodeSelector | object | `{}` | Constraints to ensure pods are scheduled on nodes with specific attributes. |
 | priorityClassName | string | `"system-node-critical"` | Priority class name for the pod, indicating its scheduling priority. |
 | replicaCount | int | `1` | Number of pod replicas to deploy. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}` | Security options for the pod. |
