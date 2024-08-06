@@ -11,6 +11,33 @@
   permissions: read-all
 
   jobs:
+    generate-docs:
+      # needs: helm-release
+      permissions:
+        contents: write
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Configure Git
+          run: |
+            git config user.name "helm-bot"
+            git config user.email "helm-bot@users.noreply.github.com"
+        - name: Install Helm
+          uses: azure/setup-helm@v3
+        - name: install helm-docs
+          run: |
+            cd /tmp
+            wget https://github.com/norwoodj/helm-docs/releases/download/v${{env.HELM_DOCS_VERSION}}/helm-docs_${{env.HELM_DOCS_VERSION}}_Linux_x86_64.tar.gz
+            tar -xvf helm-docs_${{env.HELM_DOCS_VERSION}}_Linux_x86_64.tar.gz
+            sudo mv helm-docs /usr/local/sbin
+        - name: run helm-docs
+          run: |
+            helm-docs --dry-run > README.md
+            helm-docs --dry-run > charts/nvidia-device-plugin/README.md
+
     helm-release:
       permissions:
         contents: write # for helm/chart-releaser-action to push chart release and create a release
@@ -55,33 +82,6 @@
               helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
               cosign sign -y $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
             done
-
-    generate-docs:
-      needs: helm-release
-      permissions:
-        contents: write
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-        - name: Configure Git
-          run: |
-            git config user.name "helm-bot"
-            git config user.email "helm-bot@users.noreply.github.com"
-        - name: Install Helm
-          uses: azure/setup-helm@v3
-        - name: install helm-docs
-          run: |
-            cd /tmp
-            wget https://github.com/norwoodj/helm-docs/releases/download/v${{env.HELM_DOCS_VERSION}}/helm-docs_${{env.HELM_DOCS_VERSION}}_Linux_x86_64.tar.gz
-            tar -xvf helm-docs_${{env.HELM_DOCS_VERSION}}_Linux_x86_64.tar.gz
-            sudo mv helm-docs /usr/local/sbin
-        - name: run helm-docs
-          run: |
-            helm-docs --dry-run > README.md
-            helm-docs --dry-run > charts/nvidia-device-plugin/README.md
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
