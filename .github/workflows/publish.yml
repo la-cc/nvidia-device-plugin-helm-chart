@@ -36,6 +36,7 @@
         - name: run helm-docs
           run: |
             helm-docs .
+            helm-docs --dry-run > README.md
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
