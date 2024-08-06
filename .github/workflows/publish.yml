@@ -35,12 +35,11 @@
             sudo mv helm-docs /usr/local/sbin
         - name: run helm-docs
           run: |
-            helm-docs --dry-run > README.md
-            helm-docs --dry-run > charts/anything-llm/README.md
+            helm-docs .
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
-            git add README.md charts/anything-llm/README.md
+            git add .
             git commit -m "Update README.md"
             git push origin main
           env:
