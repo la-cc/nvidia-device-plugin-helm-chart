@@ -35,7 +35,16 @@
             sudo mv helm-docs /usr/local/sbin
         - name: run helm-docs
           run: |
-            helm-docs .
+            helm-docs --dry-run > README.md
+            helm-docs --dry-run > charts/anything-llm/README.md
+        - name: Commit and push README.md
+          run: |
+            git checkout -B main # Switch to the main branch
+            git add README.md charts/anything-llm/README.md
+            git commit -m "Update README.md"
+            git push origin main
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Login to GHCR
           uses: docker/login-action@v3
           with:
