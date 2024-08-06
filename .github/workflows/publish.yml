@@ -79,14 +79,22 @@
               if [ -z "${pkg:-}" ]; then
                 break
               fi
-              helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
-              cosign sign -y $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
+              # Attempt to push the Helm package and save the status
+              helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts 2>&1 | tee .digest
+              # Check if the output indicates the version already exists
+              if grep -q "already exists" .digest; then
+                echo "Version already exists, skipping upload."
+                exit 0
+              else
+                # If the package was successfully pushed, sign it
+                cosign sign -y $(awk -F "[, ]+" '/Pushed/{print $NF}' .digest)
+              fi
             done
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
-            git add README.md charts/nvidia-device-plugin/README.md
-            git commit -m "Update README.md"
-            git push origin main
+            git status
+            ls -la
+
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
