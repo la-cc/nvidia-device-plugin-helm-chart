@@ -14,7 +14,9 @@
     generate-docs:
       # needs: helm-release
       permissions:
-        contents: write
+        contents: write # for helm/chart-releaser-action to push chart release and create a release
+        packages: write # for helm/chart-releaser-action to push chart release and create a release
+        id-token: write # for helm/chart-releaser-action to push chart release and create a release
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
@@ -37,18 +39,6 @@
           run: |
             helm-docs --dry-run > README.md
             helm-docs --dry-run > charts/nvidia-device-plugin/README.md
-
-    helm-release:
-      permissions:
-        contents: write # for helm/chart-releaser-action to push chart release and create a release
-        packages: write # for helm/chart-releaser-action to push chart release and create a release
-        id-token: write # for helm/chart-releaser-action to push chart release and create a release
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
         - name: Install Helm
           uses: azure/setup-helm@v3
         - name: Configure Git
@@ -79,22 +69,15 @@
               if [ -z "${pkg:-}" ]; then
                 break
               fi
-              # Attempt to push the Helm package and save the status
-              helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts 2>&1 | tee .digest
-              # Check if the output indicates the version already exists
-              if grep -q "already exists" .digest; then
-                echo "Version already exists, skipping upload."
-                exit 0
-              else
-                # If the package was successfully pushed, sign it
-                cosign sign -y $(awk -F "[, ]+" '/Pushed/{print $NF}' .digest)
-              fi
+              helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
+              cosign sign -y $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
             done
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
-            git status
-            ls -la
+            git add README.md charts/anything-llm/README.md
+            git commit -m "Update README.md"
+            git push origin main
 
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
