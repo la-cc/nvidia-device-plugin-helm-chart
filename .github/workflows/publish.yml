@@ -81,10 +81,11 @@
         - name: run helm-docs
           run: |
             helm-docs --dry-run > README.md
+            helm-docs --dry-run > charts/nvidia-device-plugin/README.md
         - name: Commit and push README.md
           run: |
             git checkout -B main # Switch to the main branch
-            git add README.md
+            git add README.md charts/nvidia-device-plugin/README.md
             git commit -m "Update README.md"
             git push origin main
           env:
